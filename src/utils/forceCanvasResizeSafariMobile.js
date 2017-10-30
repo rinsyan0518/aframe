@@ -5,10 +5,12 @@ module.exports = function forceCanvasResizeSafariMobile (canvasEl) {
   // iOS only workaround for https://bugs.webkit.org/show_bug.cgi?id=152556
   // By changing the size 1 pixel and restoring the previous value
   // we trigger a size recalculation cycle.
-  canvasEl.style.width = (parseInt(width, 10) + 1) + 'px';
-  canvasEl.style.height = (parseInt(height, 10) + 1) + 'px';
+  var widthUnit = width.replace(/^[0-9]+/, '');
+  var heightUnit = height.replace(/^[0-9]+/, '');
+  canvasEl.style.width = (parseInt(width, 10) + 1) + widthUnit;
+  canvasEl.style.height = (parseInt(height, 10) + 1) + heightUnit;
   setTimeout(function () {
-    canvasEl.style.width = width;
-    canvasEl.style.height = height;
+    canvasEl.style.width = '';
+    canvasEl.style.height = '';
   }, 200);
 };
