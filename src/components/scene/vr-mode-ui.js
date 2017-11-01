@@ -144,7 +144,10 @@ function createOrientationModal (exitVRHandler) {
   exit.innerHTML = 'Exit VR';
 
   // Exit VR on close.
-  exit.addEventListener('click', exitVRHandler);
+  exit.addEventListener('click', function (ev) {
+    console.log('clicked exit button');
+    exitVRHandler();
+  });
 
   modal.appendChild(exit);
 
