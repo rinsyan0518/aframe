@@ -1,6 +1,5 @@
 /* global Promise, screen */
 var initMetaTags = require('./metaTags').inject;
-var initWakelock = require('./wakelock');
 var re = require('../a-register-element');
 var scenes = require('./scenes');
 var systems = require('../system').systems;
@@ -100,7 +99,6 @@ module.exports.AScene = registerElement('a-scene', {
         var self = this;
 
         initMetaTags(this);
-        initWakelock(this);
         this.initSystems();
 
         resize = bind(this.resize, this);
