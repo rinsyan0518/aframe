@@ -1,6 +1,5 @@
 /* global Promise, screen, CustomEvent */
 var initMetaTags = require('./metaTags').inject;
-var initWakelock = require('./wakelock');
 var loadingScreen = require('./loadingScreen');
 var re = require('../a-register-element');
 var scenes = require('./scenes');
@@ -94,7 +93,6 @@ module.exports.AScene = registerElement('a-scene', {
         initPostMessageAPI(this);
 
         initMetaTags(this);
-        initWakelock(this);
 
         // Handler to exit VR (e.g., Oculus Browser back button).
         this.onVRPresentChangeBound = bind(this.onVRPresentChange, this);
