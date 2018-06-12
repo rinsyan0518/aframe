@@ -65655,11 +65655,13 @@ module.exports.Component = registerComponent('look-controls', {
   onTouchMove: function (evt) {
     var canvas = this.el.sceneEl.canvas;
     var deltaY;
+    var direction;
     var yawObject = this.yawObject;
 
     if (!this.touchStarted || !this.data.touchEnabled) { return; }
 
-    deltaY = 2 * Math.PI * (evt.touches[0].pageX - this.touchStart.x) / canvas.clientWidth;
+    direction = this.data.reverseMouseDrag ? -1 : 1;
+    deltaY = direction * 2 * Math.PI * (evt.touches[0].pageX - this.touchStart.x) / canvas.clientWidth;
 
     // Limit touch orientaion to to yaw (y axis).
     yawObject.rotation.y -= deltaY * 0.5;
@@ -75480,7 +75482,7 @@ _dereq_('./core/a-mixin');
 _dereq_('./extras/components/');
 _dereq_('./extras/primitives/');
 
-console.log('A-Frame Version: 0.8.2 (Date 2018-04-16, Commit #450dc974)');
+console.log('A-Frame Version: 0.8.2 (Date 2018-06-12, Commit #fedba93d)');
 console.log('three Version:', pkg.dependencies['three']);
 console.log('WebVR Polyfill Version:', pkg.dependencies['webvr-polyfill']);
 
