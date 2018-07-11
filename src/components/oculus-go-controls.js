@@ -5,26 +5,24 @@ var checkControllerPresentAndSetup = trackedControlsUtils.checkControllerPresent
 var emitIfAxesChanged = trackedControlsUtils.emitIfAxesChanged;
 var onButtonEvent = trackedControlsUtils.onButtonEvent;
 
-var GEARVR_CONTROLLER_MODEL_BASE_URL = 'https://cdn.aframe.io/controllers/samsung/';
-var GEARVR_CONTROLLER_MODEL_OBJ_URL = GEARVR_CONTROLLER_MODEL_BASE_URL + 'gear_vr_controller.obj';
-var GEARVR_CONTROLLER_MODEL_OBJ_MTL = GEARVR_CONTROLLER_MODEL_BASE_URL + 'gear_vr_controller.mtl';
+var GAMEPAD_ID_PREFIX = 'Oculus Go';
 
-var GAMEPAD_ID_PREFIX = 'Gear VR';
+var OCULUS_GO_CONTROLLER_MODEL_URL = 'https://cdn.aframe.io/controllers/oculus/go/oculus-go-controller.gltf';
 
 /**
- * Gear VR controls.
- * Interface with Gear VR controller and map Gamepad events to
+ * Oculus Go controls.
+ * Interface with Oculus Go controller and map Gamepad events to
  * controller buttons: trackpad, trigger
  * Load a controller model and highlight the pressed buttons.
  */
-module.exports.Component = registerComponent('gearvr-controls', {
+module.exports.Component = registerComponent('oculus-go-controls', {
   schema: {
     hand: {default: ''},  // This informs the degenerate arm model.
-    buttonColor: {type: 'color', default: '#000000'},
-    buttonTouchedColor: {type: 'color', default: '#777777'},
-    buttonHighlightColor: {type: 'color', default: '#FFFFFF'},
+    buttonColor: {type: 'color', default: '#FFFFFF'},
+    buttonTouchedColor: {type: 'color', default: '#BBBBBB'},
+    buttonHighlightColor: {type: 'color', default: '#7A7A7A'},
     model: {default: true},
-    orientationOffset: {type: 'vec3'},
+    rotationOffset: {default: 0},
     armModel: {default: true}
   },
 
@@ -109,13 +107,10 @@ module.exports.Component = registerComponent('gearvr-controls', {
     el.setAttribute('tracked-controls', {
       armModel: data.armModel,
       idPrefix: GAMEPAD_ID_PREFIX,
-      orientationOffset: data.orientationOffset
+      rotationOffset: data.rotationOffset
     });
     if (!this.data.model) { return; }
-    this.el.setAttribute('obj-model', {
-      obj: GEARVR_CONTROLLER_MODEL_OBJ_URL,
-      mtl: GEARVR_CONTROLLER_MODEL_OBJ_MTL
-    });
+    this.el.setAttribute('gltf-model', OCULUS_GO_CONTROLLER_MODEL_URL);
   },
 
   addControllersUpdateListener: function () {
@@ -130,15 +125,16 @@ module.exports.Component = registerComponent('gearvr-controls', {
     this.checkIfControllerPresent();
   },
 
-  // No need for onButtonChanged, since Gear VR controller has no analog buttons.
+  // No need for onButtonChanged, since Oculus Go controller has no analog buttons.
 
   onModelLoaded: function (evt) {
     var controllerObject3D = evt.detail.model;
     var buttonMeshes;
+
     if (!this.data.model) { return; }
     buttonMeshes = this.buttonMeshes = {};
-    buttonMeshes.trigger = controllerObject3D.children[2];
-    buttonMeshes.trackpad = controllerObject3D.children[1];
+    buttonMeshes.trigger = controllerObject3D.getObjectByName('oculus_go_button_trigger');
+    buttonMeshes.trackpad = controllerObject3D.getObjectByName('oculus_go_touchpad');
   },
 
   onButtonChanged: function (evt) {
